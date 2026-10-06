@@ -59,7 +59,11 @@ export async function login(username, password) {
     body: JSON.stringify({ username, password }),
   })
 
-  return parseResponse(response)
+  const data = await parseResponse(response)
+
+  console.log('LOGIN RESPONSE:', data)
+
+  return data
 }
 
 export async function logout() {
