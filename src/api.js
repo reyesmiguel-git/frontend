@@ -1,4 +1,7 @@
-const API_URL = (import.meta.env.VITE_API_URL || 'http://127.0.0.1:3000/api').replace(/\/$/, '')
+const API_URL = (
+  import.meta.env.VITE_API_URL ||
+  'http://127.0.0.1:3000/api'
+).replace(/\/$/, '')
 
 function getTokens() {
   return {
@@ -33,6 +36,7 @@ export function currentUser() {
 
 async function parseResponse(response) {
   const text = await response.text()
+
   let data = {}
 
   if (text) {
@@ -44,7 +48,10 @@ async function parseResponse(response) {
   }
 
   if (!response.ok) {
-    const error = new Error(data.error || data.message || 'Request failed.')
+    const error = new Error(
+      data.error || data.message || 'Request failed.'
+    )
+
     error.status = response.status
     throw error
   }
@@ -55,15 +62,16 @@ async function parseResponse(response) {
 export async function login(username, password) {
   const response = await fetch(`${API_URL}/login`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, password }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      username,
+      password,
+    }),
   })
 
-  const data = await parseResponse(response)
-
-  console.log('LOGIN RESPONSE:', JSON.stringify(data, null, 2))
-
-  return data
+  return parseResponse(response)
 }
 
 export async function logout() {
@@ -73,8 +81,12 @@ export async function logout() {
     try {
       await fetch(`${API_URL}/logout`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ refresh_token: refreshToken }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          refresh_token: refreshToken,
+        }),
       })
     } catch {
       // Client session is cleared even if the API is temporarily unavailable.
@@ -86,6 +98,7 @@ export async function logout() {
 
 export async function apiRequest(path, options = {}) {
   const { accessToken } = getTokens()
+
   const response = await fetch(`${API_URL}${path}`, {
     ...options,
     headers: {
