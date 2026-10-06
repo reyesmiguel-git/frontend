@@ -61,7 +61,7 @@ export async function login(username, password) {
 
   const data = await parseResponse(response)
 
-  console.log('LOGIN RESPONSE:', data)
+  console.log('LOGIN RESPONSE:', JSON.stringify(data, null, 2))
 
   return data
 }
